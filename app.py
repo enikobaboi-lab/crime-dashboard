@@ -523,7 +523,7 @@ with st.sidebar:
 
     # Display mode
     st.markdown('<div style="padding:0 1rem 0.2rem 1rem;font-size:0.6rem;font-weight:700;'
-                'text-transform:uppercase;letter-spacing:0.13em;color:#64748b;">📊 DISPLAY MODE</div>',
+                'text-transform:uppercase;letter-spacing:0.13em;color:#64748b;">◑ DISPLAY MODE</div>',
                 unsafe_allow_html=True)
     st.toggle("Adjust for population size", value=st.session_state.show_rate,
               key="toggle_rate",
@@ -764,7 +764,7 @@ render_kpi_strip(filtered)
 # ============================================================
 (tab_overview, tab_trends, tab_types,
  tab_regions, tab_map, tab_outcomes, tab_about) = st.tabs([
-    '📊  Overview',
+    '▦  Overview',
     '📈  Trends',
     '🔒  Crime Types',
     '🏙️  Regional View',
@@ -1263,19 +1263,35 @@ with tab_about:
     with col_a:
         st.markdown("""
         <div class="about-card">
-          <div class="about-section-title">📖 About This Dashboard</div>
+
+          <div class="about-section-title">About This Dashboard</div>
           <p style="font-size:0.88rem;color:#374151;line-height:1.75;margin-bottom:1.2rem;">
-            This interactive dashboard was built to provide an analytical overview of
-            reported crime across five  English police force regions. It enables users to
-            explore patterns, compare regions, and understand crime trends over a
-            six-month window using open data published by UK police forces.
+            This dashboard provides an interactive overview of crime trends across
+            <strong>five police force regions in England</strong> between
+            <strong>December 2024 and May 2025</strong>. Although the original project
+            proposal planned to include six regions, data for
+            <strong>Greater Manchester Police</strong> was unavailable from the
+            police.uk API at the time of extraction. Therefore, the analysis focuses
+            on the five regions with complete data.
           </p>
 
-          <div class="about-section-title">🗄️ Data Source</div>
+          <div class="about-section-title">Purpose</div>
+          <p style="font-size:0.88rem;color:#374151;line-height:1.75;margin-bottom:1.2rem;">
+            This dashboard was developed as part of a
+            <strong>BSc Computing dissertation</strong> at Arden University (2026).
+            Its purpose is to help non-technical users explore regional crime trends
+            through clear, interactive visualisations. It highlights patterns in key
+            crime types over time and geography, making crime data easier to understand
+            and compare across regions.
+          </p>
+
+          <div class="about-section-title">Data Source</div>
           <div class="about-row">
             <span class="about-label">Source</span>
-            <span class="about-val"><a href="https://data.police.uk" target="_blank"
-              style="color:#2563eb;">data.police.uk</a> — Official UK Police Open Data</span>
+            <span class="about-val">
+              <a href="https://data.police.uk" target="_blank" style="color:#2563eb;">
+              data.police.uk</a> — Official UK Police Open Data API
+            </span>
           </div>
           <div class="about-row">
             <span class="about-label">Time Period</span>
@@ -1283,68 +1299,78 @@ with tab_about:
           </div>
           <div class="about-row">
             <span class="about-label">Regions Covered</span>
-            <span class="about-val">London (Met) · Manchester · West Midlands ·
-              West Yorkshire · Thames Valley · Devon & Cornwall</span>
+            <span class="about-val">
+              London (Met) &nbsp;·&nbsp; West Midlands &nbsp;·&nbsp;
+              West Yorkshire &nbsp;·&nbsp; Thames Valley &nbsp;·&nbsp;
+              Devon &amp; Cornwall
+            </span>
           </div>
           <div class="about-row">
-            <span class="about-label">Records</span>
-            <span class="about-val">Over 1 million reported crime incidents</span>
+            <span class="about-label">Manchester</span>
+            <span class="about-val"
+              style="color:#dc2626;font-style:italic;">
+              Data unavailable from API at time of extraction — excluded from analysis
+            </span>
           </div>
-          <div class="about-row" style="margin-bottom:1.2rem;">
+          <div class="about-row">
             <span class="about-label">Population Data</span>
-            <span class="about-val">ONS 2023 mid-year estimates (used for per-100k calculations)</span>
+            <span class="about-val">ONS 2023 mid-year estimates (used for per-100k rate calculations)</span>
           </div>
 
-          <div class="about-section-title">🎯 Purpose</div>
-          <p style="font-size:0.88rem;color:#374151;line-height:1.75;margin-bottom:1.2rem;">
-            This dashboard was developed as part of a data analytics student project to
-            demonstrate skills in data collection, cleaning, exploratory analysis,
-            and interactive visualisation. It is intended for educational purposes only.
-          </p>
-
-          <div class="about-section-title">⚙️ Technologies Used</div>
+          <div class="about-section-title" style="margin-top:1.2rem;">Technologies Used</div>
           <div style="margin-top:0.5rem;">
-            <span class="tech-pill">🐍 Python 3.12</span>
-            <span class="tech-pill">📊 Streamlit</span>
-            <span class="tech-pill">📈 Plotly</span>
-            <span class="tech-pill">🐼 Pandas</span>
-            <span class="tech-pill">🗺️ OpenStreetMap</span>
-            <span class="tech-pill">☁️ Streamlit Cloud</span>
+            <span class="tech-pill">Python 3.12</span>
+            <span class="tech-pill">◈ Streamlit</span>
+            <span class="tech-pill">Plotly</span>
+            <span class="tech-pill">Pandas</span>
+            <span class="tech-pill">OpenStreetMap</span>
+            <span class="tech-pill">◈ Streamlit Cloud</span>
           </div>
+
+          <div style="margin-top:1.4rem;padding:0.9rem 1.1rem;
+               background:#f9fafb;border-radius:8px;border-left:3px solid #2563eb;">
+            <p style="font-size:0.8rem;color:#6b7280;line-height:1.6;margin:0;">
+              <em>This dashboard was created as part of a BSc Computing dissertation
+              project (Arden University, 2026).</em>
+            </p>
+          </div>
+
         </div>
         """, unsafe_allow_html=True)
 
     with col_b:
         st.markdown("""
         <div class="about-card">
-          <div class="about-section-title">📊 Dashboard Features</div>
-          <ul style="font-size:0.85rem;color:#374151;line-height:2;padding-left:1.2rem;margin-bottom:1.2rem;">
-            <li>🧠 Auto-generated Key Insights narrative</li>
-            <li>📊 5 KPI metric cards</li>
-            <li>📈 Interactive trends over time</li>
-            <li>🗺️ Crime location map (up to 8,000 points)</li>
-            <li>🔒 Crime type treemap + donut chart</li>
-            <li>🏙️ Regional comparison with population adjustment</li>
-            <li>⚖️ Case outcomes and resolution rate gauge</li>
-            <li>⬇️ Filtered data export (CSV)</li>
-            <li>⚡ Smart filter presets</li>
+
+          <div class="about-section-title">◧ Dashboard Features</div>
+          <ul style="font-size:0.85rem;color:#374151;line-height:2;
+                     padding-left:1.2rem;margin-bottom:1.2rem;">
+            <li>Auto-generated Key Insights narrative</li>
+            <li>5 KPI metric cards</li>
+            <li>Interactive crime trends over time</li>
+            <li>Crime type treemap and ranked bar chart</li>
+            <li>Regional comparison with population adjustment</li>
+            <li>Crime location map (up to 8,000 points)</li>
+            <li>Case outcomes and resolution rate gauge</li>
+            <li>Filtered data export (CSV download)</li>
+            <li>Smart filter presets (Quick Apply)</li>
+            <li>Select All / Clear All filter controls</li>
           </ul>
 
-          <div class="about-section-title">⚠️ Limitations</div>
-          <ul style="font-size:0.85rem;color:#374151;line-height:2;padding-left:1.2rem;margin-bottom:1.2rem;">
-            <li>Data covers only 6 selected police forces</li>
-            <li>Location coordinates are approximate (street-level)</li>
-            <li>Outcome data may lag — some cases ongoing</li>
-            <li>Resolution rate is an estimate based on keyword matching</li>
+          <div class="about-section-title">Limitations</div>
+          <ul style="font-size:0.85rem;color:#374151;line-height:2;
+                     padding-left:1.2rem;margin-bottom:1.2rem;">
+            <li>Only <strong>five regions</strong> are included - Greater Manchester
+                data was unavailable from the API</li>
+            <li>Covers a <strong>six-month period</strong> only, which may not
+                reflect long-term trends</li>
+            <li>All data depends on the <strong>police.uk API</strong>, which may
+                contain gaps or reporting delays</li>
+            <li>Location coordinates are approximate (street-level anonymisation)</li>
+            <li>Outcome data may lag -  some cases remain under investigation</li>
+            <li>Resolution rate is estimated via keyword matching on outcome text</li>
           </ul>
 
-          <div class="about-section-title">📬 Data Licence</div>
-          <p style="font-size:0.83rem;color:#374151;line-height:1.65;">
-            Data provided under the
-            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-               target="_blank" style="color:#2563eb;">Open Government Licence v3.0</a>.
-            Contains public sector information licensed by the Home Office.
-          </p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1354,11 +1380,10 @@ with tab_about:
 # ============================================================
 st.markdown("""
 <div class="dash-footer">
-    🔍 UK Regional Crime Dashboard &nbsp;·&nbsp;
+    UK Regional Crime Dashboard &nbsp;·&nbsp;
     Data: <a href="https://data.police.uk">data.police.uk</a> &nbsp;·&nbsp;
-    December 2024 – May 2025 &nbsp;·&nbsp;
+    5 Regions · December 2024 – May 2025 &nbsp;·&nbsp;
     Built with Python · Streamlit · Plotly &nbsp;·&nbsp;
-    Population: ONS 2023 &nbsp;·&nbsp;
-    For educational purposes only
+    BSc Computing Dissertation · Arden University 2026
 </div>
 """, unsafe_allow_html=True)
