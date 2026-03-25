@@ -1266,7 +1266,7 @@ with tab_about:
           <div class="about-section-title">📖 About This Dashboard</div>
           <p style="font-size:0.88rem;color:#374151;line-height:1.75;margin-bottom:1.2rem;">
             This interactive dashboard was built to provide an analytical overview of
-            reported crime across six English police force regions. It enables users to
+            reported crime across five  English police force regions. It enables users to
             explore patterns, compare regions, and understand crime trends over a
             six-month window using open data published by UK police forces.
           </p>
