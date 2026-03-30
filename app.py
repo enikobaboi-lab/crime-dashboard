@@ -345,9 +345,9 @@ df = load_data()
 # ============================================================
 # PRE-COMPUTE
 # ============================================================
-all_regions = sorted(df['Region_Short'].dropna().unique())
-all_crimes  = sorted(df['Crime_Type'].dropna().unique())
-all_months  = df.sort_values('Month')['Month_Name'].unique().tolist()
+all_regions = sorted(df['Region_Short'].dropna().unique().tolist())
+all_crimes  = sorted(df['Crime_Type'].dropna().unique().tolist())
+all_months  = [str(m) for m in df.sort_values('Month')['Month_Name'].unique()]
 
 region_counts = df['Region_Short'].value_counts().to_dict()
 crime_counts  = df['Crime_Type'].value_counts().to_dict()
@@ -397,9 +397,17 @@ if 'show_rate'   not in st.session_state: st.session_state.show_rate   = False
 
 
 def _reset_widgets(*keys):
+    # Safely update multiselect widget values without deleting keys.
+    # Deleting a key before rerun causes Streamlit to crash when reconciling widgets.
+    # Instead, we directly set the widget's session state to the current sel_* value.
+    key_map = {
+        'ms_r': [r_inv[r] for r in st.session_state.sel_regions if r in r_inv],
+        'ms_c': [c_inv[c] for c in st.session_state.sel_crimes  if c in c_inv],
+        'ms_m': [m_inv[m] for m in st.session_state.sel_months  if m in m_inv],
+    }
     for k in keys:
-        if k in st.session_state:
-            del st.session_state[k]
+        if k in key_map:
+            st.session_state[k] = key_map[k]
 
 def _sync_r():
     labels = st.session_state.get('ms_r', [])
@@ -454,7 +462,7 @@ with st.sidebar:
         else:
             if st.button("📅 Latest\n3 Months", key="pre_recent", use_container_width=True,
                          help="Most recent 3 months"):
-                st.session_state.sel_months = all_months[-3:].copy()
+                st.session_state.sel_months = list(all_months[-3:])
                 _reset_widgets('ms_m'); st.rerun()
     st.markdown("---")
 
@@ -551,7 +559,8 @@ with st.sidebar:
         st.session_state.sel_crimes  = all_crimes.copy()
         st.session_state.sel_months  = all_months.copy()
         st.session_state.show_rate   = False
-        _reset_widgets('ms_r','ms_c','ms_m','toggle_rate'); st.rerun()
+        st.session_state.toggle_rate = False
+        _reset_widgets('ms_r','ms_c','ms_m'); st.rerun()
 
     # ── DOWNLOAD DATA BUTTON (enhancement #7) ────────────────
     st.markdown("---")
@@ -1290,7 +1299,7 @@ with tab_about:
             <span class="about-label">Source</span>
             <span class="about-val">
               <a href="https://data.police.uk" target="_blank" style="color:#2563eb;">
-              data.police.uk</a> — Official UK Police Open Data API
+              data.police.uk</a>  Official UK Police Open Data API
             </span>
           </div>
           <div class="about-row">
@@ -1309,7 +1318,7 @@ with tab_about:
             <span class="about-label">Manchester</span>
             <span class="about-val"
               style="color:#dc2626;font-style:italic;">
-              Data unavailable from API at time of extraction — excluded from analysis
+              Data unavailable from API at time of extraction excluded from analysis
             </span>
           </div>
           <div class="about-row">
