@@ -340,7 +340,8 @@ def load_data():
     if 'Outcome' in df.columns:
         df['Outcome'] = df['Outcome'].fillna('Unknown')
     # Save memory: convert string columns to category dtype
-    for col in ['Region_Short', 'Crime_Type', 'Month_Name', 'Outcome']:
+    # Note: Region_Short must stay as string (used in groupby + map arithmetic)
+    for col in ['Crime_Type', 'Month_Name', 'Outcome']:
         if col in df.columns:
             df[col] = df[col].astype('category')
     gc.collect()
