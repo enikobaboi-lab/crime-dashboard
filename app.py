@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import gc
 
 # ============================================================
 # PAGE CONFIG
@@ -320,7 +321,7 @@ html, body, [class*="css"] { font-family: 'Inter','Segoe UI',sans-serif; }
 # ============================================================
 # DATA LOADING
 # ============================================================
-@st.cache_data
+@st.cache_data(show_spinner="Loading crime data…")
 def load_data():
     df = pd.read_csv('cleaned_crime_data.csv.gz', compression='gzip')
     df['Month'] = pd.to_datetime(df['Month'])
@@ -338,6 +339,11 @@ def load_data():
     df['Region_Short'] = df['Region_Short'].fillna(df['Region'])
     if 'Outcome' in df.columns:
         df['Outcome'] = df['Outcome'].fillna('Unknown')
+    # Save memory: convert string columns to category dtype
+    for col in ['Region_Short', 'Crime_Type', 'Month_Name', 'Outcome']:
+        if col in df.columns:
+            df[col] = df[col].astype('category')
+    gc.collect()
     return df
 
 df = load_data()
@@ -568,13 +574,10 @@ with st.sidebar:
                 'text-transform:uppercase;letter-spacing:0.13em;color:#64748b;">⬇️ EXPORT</div>',
                 unsafe_allow_html=True)
 
-    @st.cache_data
-    def to_csv(d): return d.to_csv(index=False).encode('utf-8')
-
     _preview_df = df[df['Region_Short'].isin(_r) & df['Crime_Type'].isin(_c) & df['Month_Name'].isin(_m)]
     st.download_button(
         label=f"Download Filtered Data ({len(_preview_df):,} rows)",
-        data=to_csv(_preview_df),
+        data=_preview_df.to_csv(index=False).encode('utf-8'),
         file_name='uk_crime_filtered.csv',
         mime='text/csv',
         use_container_width=True
@@ -598,7 +601,7 @@ filtered = df[
     df['Region_Short'].isin(selected_regions) &
     df['Crime_Type'].isin(selected_crimes) &
     df['Month_Name'].isin(selected_months)
-].copy()
+]
 
 
 # ============================================================
@@ -1133,15 +1136,15 @@ with tab_map:
         if len(md) == 0:
             no_data("No location data for this selection.")
         else:
-            sample_n = min(8000, len(md))
+            sample_n = min(5000, len(md))
             ms = md.sample(n=sample_n, random_state=42) if len(md)>sample_n else md
-            fig_map = px.scatter_mapbox(ms, lat='Lat', lon='Long', color='Crime_Type',
+            fig_map = px.scatter_map(ms, lat='Lat', lon='Long', color='Crime_Type',
                                         hover_name='Crime_Type',
                                         hover_data={'Region_Short':True,'Month_Name':True,
                                                     'Lat':False,'Long':False},
                                         zoom=5.5, center={'lat':52.5,'lon':-1.5},
                                         height=590, opacity=0.55)
-            fig_map.update_layout(mapbox_style='open-street-map', paper_bgcolor='white',
+            fig_map.update_layout(map_style='open-street-map', paper_bgcolor='white',
                                   font=dict(family='Inter,Segoe UI,sans-serif',color='#374151'),
                                   margin=dict(l=0,r=0,t=0,b=0),
                                   legend=dict(orientation='h',yanchor='top',y=-0.02,
